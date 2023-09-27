@@ -26,7 +26,9 @@ import { MODULE_KIND_MAP } from 'utils/constants'
 import { trigger } from 'utils/action'
 import ObjectMapper from 'utils/object.mapper'
 
+//用于生列表展示相关功能的工厂函数，接收options，返回一个函数WrappedComponent
 export default function withList(options) {
+  //该返回函数接受一个目标组件，返回增强的组件listwrapper
   return WrappedComponent => {
     const ObserverComponent = observer(WrappedComponent)
     class ListWrapper extends React.Component {

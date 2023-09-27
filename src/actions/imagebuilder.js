@@ -36,13 +36,16 @@ const filterImageEnv = (data, fn) => {
 }
 
 export default {
+  //当触发 'imagebuilder.create' 操作时，会打开一个模态框（弹窗），显示一个创建图像构建的表单。
   'imagebuilder.create': {
     on({ store, cluster, namespace, module, success, ...props }) {
+      //获取 formTemplate：根据模块（module）获取表单模板。
       const formTemplate = FORM_TEMPLATES[module]({
         namespace,
       })
-
+      //通过 Modal.open 打开模态框，传入一系列属性设置
       const modal = Modal.open({
+        //用户点击模态框中的确认按钮后执行的操作
         onOk: data => {
           if (!data) {
             return
@@ -50,7 +53,7 @@ export default {
 
           const environment = filterImageEnv(data, v => !isEmpty(v))
           set(data, 'spec.config.environment', environment)
-
+          //确认按钮点击后，关闭，显示成功，清除表单数据
           store.create(data, { cluster, namespace }).then(() => {
             Modal.close(modal)
             Notify.success({ content: t('CREATE_SUCCESSFUL') })
@@ -71,7 +74,9 @@ export default {
       })
     },
   },
+  //当触发 'imagebuilder.rerun' 操作时
   'imagebuilder.rerun': {
+    //打开一个模态框，显示一个重新运行图像构建的表单
     on({ store, detail, success, ...props }) {
       const modal = Modal.open({
         onOk: data => {

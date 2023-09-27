@@ -23,15 +23,16 @@ import { get } from 'lodash'
 
 import { Avatar, Status } from 'components/Base'
 import Banner from 'components/Cards/Banner'
-import { withProjectList, ListPage } from 'components/HOCs/withList'
+import withList, { ListPage } from 'components/HOCs/withList'
 import Table from 'components/Tables/List'
 
 import { getLocalTime, getDisplayName } from 'utils'
 import { ICON_TYPES } from 'utils/constants'
 
 import S2IBuilderStore from 'stores/s2i/builder'
-
-@withProjectList({
+import { inject, observer, Provider } from 'mobx-react'
+@inject('devopsStore')
+@withList({
   store: new S2IBuilderStore('s2ibuilders'),
   module: 's2ibuilders',
   name: 'IMAGE_BUILDER',
@@ -40,8 +41,8 @@ export default class ImageBuilders extends React.Component {
   get store() {
     return this.props.store
   }
-// 组件挂载后的操作，创建一个MobX反应（reacttion），
-//在WrappedComponent变化的时候进行一些操作，比如设定设定定时器刷新列表等
+  // 组件挂载后的操作，创建一个MobX反应（reacttion），
+  //在WrappedComponent变化的时候进行一些操作，比如设定设定定时器刷新列表等
   componentDidMount() {
     this.freshDisposer = reaction(
       () => this.store.list.isLoading,
@@ -57,12 +58,12 @@ export default class ImageBuilders extends React.Component {
       { fireImmediately: true }
     )
   }
-//组件卸载钱，清理之前创建的定时器
+  //组件卸载钱，清理之前创建的定时器
   componentWillUnmount() {
     this.freshDisposer && this.freshDisposer()
     clearTimeout(this.freshTimer)
   }
-// 定义了一个数组，包含用于列表项操作的配置信息，比如编辑和删除
+  // 定义了一个数组，包含用于列表项操作的配置信息，比如编辑和删除
   get itemActions() {
     const { trigger, name } = this.props
     return [
@@ -89,7 +90,7 @@ export default class ImageBuilders extends React.Component {
       },
     ]
   }
-//定义了一个函数，返回展示在列表中的列配置，包括名称、状态、类型、服务、创建时间等
+  //定义了一个函数，返回展示在列表中的列配置，包括名称、状态、类型、服务、创建时间等
   getColumns = () => {
     const { prefix, module } = this.props
     return [
@@ -105,8 +106,8 @@ export default class ImageBuilders extends React.Component {
             desc={
               record.serviceName
                 ? t('BUILD_IMAGE_FOR_SERVICE', {
-                    service: record.serviceName,
-                  })
+                  service: record.serviceName,
+                })
                 : '-'
             }
             to={`${prefix}/${name}`}
@@ -162,22 +163,40 @@ export default class ImageBuilders extends React.Component {
       },
     ]
   }
-//定义函数用于出发创建s2i构建操作
+  //定义函数用于出发创建s2i构建操作
   showCreate = () => {
-    const { match, module, projectStore } = this.props
+    // gbk
+    // const { match, module, projectStore } = this.props
+    const { match, module, devopsStore } = this.props
     //trigger用于出发js中定义的函数
     return this.props.trigger('imagebuilder.create', {
       module,
-      projectDetail: projectStore.detail,
-      namespace: match.params.namespace,
+      projectDetail: devopsStore.detail,
+      // projectDetail: projectStore.detail,
+      namespace: match.params.devops,
+      // namespace: match.params.namespace,
       cluster: match.params.cluster,
     })
   }
-//渲染页面内容，包括 Banner、Table 和列表展示相关的组件，以及相关的 props
+  // gbk
+  getData = async ({ silent, ...params } = {}) => {
+    const store = this.props.store
+
+    silent && (store.list.silent = true)
+    await store.fetchList({
+      ...this.props.match.params,
+      ...params,
+      namespace: this.props.match.params.devops,
+    })
+    store.list.silent = false
+  }
+
+  //渲染页面内容，包括 Banner、Table 和列表展示相关的组件，以及相关的 props
   render() {
     const { bannerProps, tableProps } = this.props
     return (
-      <ListPage {...this.props}>
+      // gbk
+      <ListPage {...this.props} getData={this.getData}>
         <Banner {...bannerProps} description={t(`IMAGE_BUILDER_DESC`)} />
         <Table
           {...tableProps}

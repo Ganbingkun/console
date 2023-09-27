@@ -18,6 +18,7 @@
 module.exports = {
   // Banner
   CONTINUOUS_DEPLOYMENT_PL: '持续部署',
+  
   CONTINUOUS_DEPLOYMENT_DESC: '管理持续部署，以通过 GitOps 持续部署资源。 ',
   // List
   CONTINUOUS_DEPLOYMENT_EMPTY_DESC: '请创建一个部署。',

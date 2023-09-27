@@ -68,7 +68,7 @@ export default class S2IBuilderStore extends Base {
     supportS2iLanguage.b2i = uniq(supportS2iLanguage.b2i)
     return supportS2iLanguage
   }
-  
+
   //获取Builder模板函数
   getBuilderTemplate = async params =>
     await request.get(
@@ -212,8 +212,8 @@ export default class S2IBuilderStore extends Base {
     const annotations = isUpdateWorkload
       ? {}
       : {
-          'devops.kubesphere.io/donotautoscale': 'true',
-        }
+        'devops.kubesphere.io/donotautoscale': 'true',
+      }
     return this.runStore.create({
       apiVersion: 'devops.kubesphere.io/v1alpha1',
       kind: 'S2iRun',
@@ -233,12 +233,12 @@ export default class S2IBuilderStore extends Base {
     if (!url) return
     const params = secret
       ? {
-          remoteUrl: url,
-          secretRef: {
-            name: secret,
-            namespace,
-          },
-        }
+        remoteUrl: url,
+        secretRef: {
+          name: secret,
+          namespace,
+        },
+      }
       : { remoteUrl: url }
     return await request.post(
       `kapis/resources.kubesphere.io/v1alpha2/git/verify`,

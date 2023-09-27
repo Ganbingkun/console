@@ -412,6 +412,12 @@ client:
             icon: vnas,
             clusterModule: devops,
           }
+        - {
+            name: new_s2ibuilders,
+            title: NEW_IMAGE_BUILDER_PL,
+            icon: vnas,
+            clusterModule: devops,
+          }
         - name: monitoring
           title: MONITORING_AND_ALERTING
           icon: monitor
@@ -511,6 +517,14 @@ client:
         - {
             name: cd,
             title: CONTINUOUS_DEPLOYMENT_PL,
+            icon: rocket,
+            authKey: "applications",
+            requiredClusterVersion: v3.3.0,
+          }
+          # 新s2i
+        - {
+            name: image-builder,
+            title: IMAGE_BUILDER_PL,
             icon: rocket,
             authKey: "applications",
             requiredClusterVersion: v3.3.0,

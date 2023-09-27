@@ -19,6 +19,7 @@ module.exports = {
   // Banner
   IMAGE_BUILDER_PL: '镜像构建器',
   IMAGE_BUILDER_DESC: '镜像构建器（Image Builder）是将代码或者制品制作成容器镜像的工具。您可以通过简单的设置将制品或代码直接制作成容器镜像。',
+
   // List
   IMAGE_BUILDER_EMPTY_DESC: '请创建一个镜像构建器。',
   NOT_RUNNING_YET: '未运行',
