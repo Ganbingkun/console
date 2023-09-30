@@ -218,30 +218,30 @@ export default class ImageBuilderDetail extends React.Component {
     ]
   }
 
-  render() {
-    const stores = {
-      detailStore: this.store,
-      s2iRunStore: this.s2iRunStore,
-      resourceStore: this.resourceStore,
-    }
+    render() {
+      const stores = {
+        detailStore: this.store,
+        s2iRunStore: this.s2iRunStore,
+        resourceStore: this.resourceStore,
+      }
 
-    if (this.store.isLoading || this.s2iRunStore.isLoading) {
-      return <Loading className="ks-page-loading" />
-    }
+      if (this.store.isLoading || this.s2iRunStore.isLoading) {
+        return <Loading className="ks-page-loading" />
+      }
 
-    const sideProps = {
-      module: this.module,
-      name: getDisplayName(this.store.detail),
-      desc: this.store.detail.description,
-      operations: this.getOperations(),
-      attrs: this.getAttrs(),
-      breadcrumbs: [
-        {
-          label: t('IMAGE_BUILDER_PL'),
-          url: this.listUrl,
-        },
-      ],
-    }
+      const sideProps = {
+        module: this.module,
+        name: getDisplayName(this.store.detail),
+        desc: this.store.detail.description,
+        operations: this.getOperations(),
+        attrs: this.getAttrs(),
+        breadcrumbs: [
+          {
+            label: t('IMAGE_BUILDER_PL'),
+            url: this.listUrl,
+          },
+        ],
+      }
 
     return (
       <DetailPage
