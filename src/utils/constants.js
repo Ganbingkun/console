@@ -584,6 +584,7 @@ export const GRAY_RELEASE_CATEGORIES = [
 
 export const PATTERN_NAME = /^[a-z0-9]([-a-z0-9]*[a-z0-9])?$/
 export const PATTERN_USER_NAME = /^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$/
+export const PATTERN_ALIAS_NAME = /^(?!-)([a-zA-Z0-9\u4e00-\u9fa5-]+)(?<!-)$/
 export const PATTERN_IMAGE_NAME = /^[a-z0-9]([-a-z0-9]*[a-z0-9])?((\.|\/)[a-z0-9]([-a-z0-9]*[a-z0-9])?)*(:([a-z0-9])*)?$/
 export const PATTERN_SERVICE_NAME = /^[a-z]([-a-z0-9]*[a-z0-9])?$/
 export const PATTERN_SERVICE_VERSION = /^[a-z0-9]*$/
@@ -605,6 +606,40 @@ export const PATTERN_IMAGE_TAG = /^(.*?)([0-9a-zA-Z/]*)(:[-.\w]*[0-9a-zA-Z])*$/
 export const PATTERN_APPTEMPLATE_VERSION = /[a-zA-Z0-9](\.?-?[a-zA-Z0-9])+(\s?\[?[a-zA-Z0-9]+\.?-?\]?)*/
 export const PATTERN_UTC_TIME = /^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\.[0-9]+Z/
 export const PATTERN_ENV_NAME = /^[-._a-zA-Z][-._a-zA-Z0-9]*$/
+export const CRON_EXP = /^(@(annually|yearly|monthly|weekly|daily|hourly|midnight))|(@every (\d+(ns|us|µs|ms|s|m|h))+)|((((\d+,)+\d+|(\d+(\/|-)\d+)|\d+|\*) ?){5,7})$/
+
+export const PIPELINE_TASKS = {
+  All: [
+    'git',
+    'checkout',
+    'mail',
+    'echo',
+    'shell',
+    'withCredentials',
+    'container',
+    'archiveArtifacts',
+    'input',
+    'kubernetesDeploy',
+    'cd',
+    'timeout',
+    'withSonarQubeEnv',
+    'waitForQualityGate',
+    'script',
+  ],
+  SCM: ['git', 'checkout', 'cd'],
+  Normal: [
+    'echo',
+    'shell',
+    'mail',
+    'withCredentials',
+    'container',
+    'archiveArtifacts',
+    'kubernetesDeploy',
+    'timeout',
+    'script',
+  ],
+  Review: ['input', 'withSonarQubeEnv', 'waitForQualityGate'],
+}
 
 export const PIPELINE_CONDITIONS = [
   'branch',
@@ -699,6 +734,8 @@ export const COLORS_MAP = {
   lightestRed: '#fae7e5',
   lightestYellow: '#ffe1be',
 }
+
+export const ALERT_GROUP_MAX_LIMIT = 40
 
 export const MILLISECOND_IN_TIME_UNIT = {
   s: 1000,
@@ -924,7 +961,7 @@ export const API_VERSIONS = {
   statefulsets: 'apis/apps/v1',
   daemonsets: 'apis/apps/v1',
   jobs: 'apis/batch/v1',
-  cronjobs: 'apis/batch/v1beta1',
+  cronjobs: 'apis/batch/v1',
   pods: 'api/v1',
   namespaces: 'api/v1',
   services: 'api/v1',
@@ -947,7 +984,7 @@ export const API_VERSIONS = {
   applications: 'apis/app.k8s.io/v1beta1',
   strategies: 'apis/servicemesh.kubesphere.io/v1alpha2',
   servicepolicies: 'apis/servicemesh.kubesphere.io/v1alpha2',
-  horizontalpodautoscalers: 'apis/autoscaling/v2beta2',
+  horizontalpodautoscalers: 'apis/autoscaling/v2',
   customresourcedefinitions: 'apis/apiextensions.k8s.io/v1',
   clusters: 'apis/cluster.kubesphere.io/v1alpha1',
   workspaces: 'apis/tenant.kubesphere.io/v1alpha2',
