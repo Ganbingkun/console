@@ -16,14 +16,14 @@
  * along with KubeSphere Console.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { action, observable, extendObservable } from 'mobx'
+import { get } from 'lodash'
+import { action, extendObservable, observable } from 'mobx'
 import { RouterStore } from 'mobx-react-router'
 import { parse } from 'qs'
-import { getQueryString } from 'utils'
 
 import UserStore from 'stores/user'
 import WebSocketStore from 'stores/websocket'
-import { get } from 'lodash'
+import { getQueryString } from 'utils'
 
 export default class RootStore {
   @observable
@@ -83,6 +83,11 @@ export default class RootStore {
 
   login(params) {
     return request.post('login', params)
+  }
+
+  loginIdentityProviders(params) {
+    const url = `/oauth/login/${params.title}`
+    return request.post(url, { ...params })
   }
 
   @action

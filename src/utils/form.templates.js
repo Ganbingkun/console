@@ -16,7 +16,7 @@
  * along with KubeSphere Console.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { get, cloneDeep, unset } from 'lodash'
+import { get, cloneDeep, unset, set } from 'lodash'
 import { MODULE_KIND_MAP } from './constants'
 
 const getDeploymentTemplate = ({ namespace }) => ({
@@ -184,7 +184,7 @@ const getJobTemplate = ({ namespace }) => ({
 })
 
 const getCronJobTemplate = ({ namespace }) => ({
-  apiVersion: 'batch/v1beta1',
+  apiVersion: 'batch/v1',
   kind: 'CronJob',
   metadata: {
     namespace,
@@ -287,7 +287,7 @@ const getSecretTemplate = ({ namespace }) => ({
 })
 
 const getHorizontalPodAutoscalerTemplate = ({ name, namespace, target }) => ({
-  apiVersion: 'autoscaling/v2beta2',
+  apiVersion: 'autoscaling/v2',
   kind: 'HorizontalPodAutoscaler',
   metadata: {
     name,
@@ -439,19 +439,37 @@ const getAlertPolicyTemplate = ({ workspace, namespace } = {}) => ({
   },
 })
 
-const getCustomAlertPolicyTemplate = ({ namespace } = {}) => ({
-  name: '',
-  namespace,
-  query: '',
-  duration: '5m',
-  labels: {
-    severity: 'warning',
-  },
-  annotations: {
-    summary: '',
-    message: '',
-  },
-})
+const getCustomAlertPolicyTemplate = ({ multi = false, namespace } = {}) => {
+  const form = {
+    apiVersion: 'alerting.kubesphere.io/v2beta1',
+    kind: multi
+      ? 'GlobalRuleGroup'
+      : namespace
+      ? 'RuleGroup'
+      : 'ClusterRuleGroup',
+    metadata: {
+      name: '',
+      labels: {
+        'alerting.kubesphere.io/enable': 'true',
+      },
+    },
+    annotations: {
+      aliasName: '',
+      description: '',
+    },
+    spec: {
+      interval: '',
+      partial_response_strategy: '',
+      rules: [],
+    },
+  }
+
+  if (namespace) {
+    set(form, 'metadata.namespace', namespace)
+  }
+
+  return form
+}
 
 const getApplicationTemplate = ({ namespace }) => ({
   apiVersion: 'app.k8s.io/v1beta1',
