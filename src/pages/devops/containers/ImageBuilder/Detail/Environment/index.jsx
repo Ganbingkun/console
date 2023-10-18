@@ -62,10 +62,6 @@ export default class EnvVariables extends React.Component {
     if (!isEmpty(containers)) return containers
     if (!isEmpty(spec)) return get(spec, 'template.spec.containers', [])
 
-    return []
-  }
-
-  get test() {
     return '2'
   }
 
