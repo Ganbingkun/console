@@ -19,7 +19,7 @@
 import { Avatar, Status } from 'components/Base'
 import Banner from 'components/Cards/Banner'
 import withList, { ListPage } from 'components/HOCs/withList'
-import { computed } from 'mobx'
+import { computed, toJS } from 'mobx'
 import React from 'react'
 
 import DevOpsStore from 'stores/devops'
@@ -84,12 +84,15 @@ export default class DevOps extends React.Component {
 
   @computed
   get clusters() {
-    return this.workspaceStore.clusters.data.map(item => ({
-      label: item.name,
-      value: item.name,
-      disabled: !item.isReady,
-      cluster: item,
-    }))
+    const list = this.workspaceStore.clusters.data
+      .filter(i => i.isReady && i.configz?.devops)
+      .map(item => ({
+        label: item.name,
+        value: item.name,
+        cluster: toJS(item),
+      }))
+      .sort((a, b) => a.disabled - b.disabled)
+    return list
   }
 
   get clusterProps() {
